@@ -27,7 +27,7 @@
              DLYJOB     DLY(60)
              ENDSBS     SBS(*ALL) OPTION(*IMMED)
              MONMSG     MSGID(CPF0000)
-             DLYJOB     DLY(120)
+             DLYJOB     DLY(180)
 
 /* SAVSYS which requires restricted mode. */
 /* it will fail if all subsystems are not ended. */
@@ -36,7 +36,7 @@ SAVSYSLP:
                           OUTPUT(*PRINT)
              MONMSG     MSGID(CPF0000) EXEC(DO)
              CHGVAR     VAR(&TRY) VALUE(&TRY + 1)
-             IF         COND(&TRY *GT 20) THEN(GOTO CMDLBL(ERROR))
+             IF         COND(&TRY *GT 30) THEN(GOTO CMDLBL(ERROR))
              DLYJOB     DLY(60)
              GOTO       CMDLBL(SAVSYSLP)
              ENDDO
