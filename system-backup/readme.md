@@ -1,0 +1,51 @@
+0. Create library and source file.
+```
+CRTLIB   LIB(QSTOOLS) TEXT('Site Tooling')
+
+CRTSRCPF FILE(QSTOOLS/QCLSRC) RCDLEN(112)
+```
+
+1. Create dedicated save profile.
+```
+CRTUSRPRF USRPRF(SAVEOPR) PASSWORD(*NONE) USRCLS(*SECOFR) +
+          SPCAUT(*ALLOBJ *SAVSYS *JOBCTL *IOSYSCFG) INLMNU(*SIGNOFF) +
+          TEXT('Unattended Save Jobs')
+
+CRTJOBD   JOBD(QSTOOLS/FULLSAVE) JOBQ(QSYS/QBASE) USER(SAVEOPR) +
+          INQMSGRPY(*SYSRPYL) LOG(4 0 *SECLVL) LOGCLPGM(*YES) +
+          TEXT('Unattended Full System Save')
+
+GRTOBJAUT OBJ(QSTOOLS/FULLSAVE) OBJTYPE(*JOBD) USER(*PUBLIC) AUT(*EXCLUDE)
+```
+
+2. Compile the CL file after file is moved to /home/qsecofr.
+```
+CPYFRMSTMF FROMSTMF('/home/qsecofr/fullsave.cl') +
+           TOMBR('/QSYS.LIB/QSTOOLS.LIB/QCLSRC.FILE/FULLSAVE.MBR') MBROPT(*REPLACE)
+
+CHGPFM     FILE(QSTOOLS/QCLSRC) MBR(FULLSAVE) SRCTYPE(CLP)
+
+CRTCLPGM   PGM(QSTOOLS/FULLSAVE) SRCFILE(QSTOOLS/QCLSRC)
+```
+
+3. Setup reply list.
+```
+ADDRPYLE SEQNBR(1000) MSGID(CPA4029) RPY(G)
+ADDRPYLE SEQNBR(1010) MSGID(CPA4085) RPY(C)
+```
+
+4. Put a fresh tape in and manually run the job.
+```
+INZTAP DEV(TAP01) NEWVOL(FULL01) CHECK(*NO)
+
+SBMJOB CMD(CALL QSTOOLS/FULLSAVE) JOB(FULLSAVE) JOBD(QSTOOLS/FULLSAVE) +
+       JOBQ(QSYS/QBASE) USER(*JOBD)
+```
+
+5. After a clean test you can setup a schedule to automatically run or you can
+just run step 4 on demand to manually run backups.
+```
+ADDJOBSCDE JOB(FULLSAVE) CMD(CALL QSTOOLS/FULLSAVE) FRQ(*WEEKLY) +
+           SCDDAY(*SUN) SCDTIME(020000) JOBD(QSTOOLS/FULLSAVE) +
+           JOBQ(QSYS/QBASE) USER(*JOBD) TEXT('Weekly full system save')
+```
