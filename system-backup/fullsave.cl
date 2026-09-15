@@ -1,6 +1,8 @@
              PGM
              DCL        VAR(&MSG) TYPE(*CHAR) LEN(256)
              DCL        VAR(&TRY) TYPE(*DEC) LEN(2 0) VALUE(0)
+             OVRPRTF    FILE(QSYSPRT) MAXRCDS(*NOMAX) OVRSCOPE(*JOB)
+             MONMSG     MSGID(CPF0000)
 
 /* Verify valid tape before touching subsystems */
              VRYCFG     CFGOBJ(TAP01) CFGTYPE(*DEV) STATUS(*ON)
@@ -38,6 +40,7 @@ SAVSYSLP:
              CHGVAR     VAR(&TRY) VALUE(&TRY + 1)
              IF         COND(&TRY *GT 30) THEN(GOTO CMDLBL(ERROR))
              ENDSBS     SBS(*ALL) OPTION(*IMMED)
+             MONMSG     MSGID(CPF0000)
              DLYJOB     DLY(60)
              GOTO       CMDLBL(SAVSYSLP)
              ENDDO
@@ -65,7 +68,7 @@ SAVSYSLP:
 /* Saves error message and sends it to QSYSOPR. */
  ERROR:      RCVMSG     MSGTYPE(*EXCP) MSG(&MSG)
              MONMSG     MSGID(CPF0000)
-             SNDMSG     MSG('FULLSAVE FAILED:' *CAT &MSG) +
+             SNDMSG     MSG('FULLSAVE FAILED: ' *CAT &MSG) +
                           TOMSGQ(QSYSOPR)
              MONMSG     MSGID(CPF0000)
 
