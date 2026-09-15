@@ -65,7 +65,7 @@ SAVSYSLP:
 /* Saves error message and sends it to QSYSOPR. */
  ERROR:      RCVMSG     MSGTYPE(*EXCP) MSG(&MSG)
              MONMSG     MSGID(CPF0000)
-             SNDMSG     MSG('FULLSAVE FAILED: ' *CAT &MSG) +
+             SNDMSG     MSG('FULLSAVE FAILED:' *CAT &MSG) +
                           TOMSGQ(QSYSOPR)
              MONMSG     MSGID(CPF0000)
 

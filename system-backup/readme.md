@@ -42,10 +42,9 @@ SBMJOB CMD(CALL QSTOOLS/FULLSAVE) JOB(FULLSAVE) JOBD(QSTOOLS/FULLSAVE) +
        JOBQ(QSYS/QBASE) USER(*JOBD)
 ```
 
-5. After a clean test you can setup a schedule to automatically run or you can
-just run step 4 on demand to manually run backups.
+5. After a clean test you can setup a schedule to automatically run or you can just run step 4 on demand to manually run backups.
 ```
 ADDJOBSCDE JOB(FULLSAVE) CMD(CALL QSTOOLS/FULLSAVE) FRQ(*WEEKLY) +
            SCDDAY(*SUN) SCDTIME(020000) JOBD(QSTOOLS/FULLSAVE) +
-           JOBQ(QSYS/QBASE) USER(*JOBD) TEXT('Weekly full system save')
+           JOBQ(QSYS/QBASE) USER(*JOBD) TEXT('Weekly Full System Save')
 ```
