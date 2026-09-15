@@ -37,6 +37,7 @@ SAVSYSLP:
              MONMSG     MSGID(CPF0000) EXEC(DO)
              CHGVAR     VAR(&TRY) VALUE(&TRY + 1)
              IF         COND(&TRY *GT 30) THEN(GOTO CMDLBL(ERROR))
+             ENDSBS     SBS(*ALL) OPTION(*IMMED)
              DLYJOB     DLY(60)
              GOTO       CMDLBL(SAVSYSLP)
              ENDDO
