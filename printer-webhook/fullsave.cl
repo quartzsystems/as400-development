@@ -30,9 +30,9 @@
 /* Takes system to restricted state. */
 /* Ends TCP first and then every subsystem except QCTL.*/
              ENDTCP     OPTION(*IMMED)
-             MONMSG     MSGID(CPF0000)
+             MONMSG     MSGID(CPF0000 TCP0000)
              DLYJOB     DLY(60)
-             ENDSBS     SBS(*ALL) OPTION(*IMMED)
+             ENDSBS     SBS(*ALL) OPTION(*IMMED) BCHTIMLMT(720)
              MONMSG     MSGID(CPF0000)
              DLYJOB     DLY(180)
 
@@ -44,7 +44,7 @@ SAVSYSLP:
              MONMSG     MSGID(CPF0000) EXEC(DO)
              CHGVAR     VAR(&TRY) VALUE(&TRY + 1)
              IF         COND(&TRY *GT 30) THEN(GOTO CMDLBL(ERROR))
-             ENDSBS     SBS(*ALL) OPTION(*IMMED)
+             ENDSBS     SBS(*ALL) OPTION(*IMMED) BCHTIMLMT(720)
              MONMSG     MSGID(CPF0000)
              DLYJOB     DLY(60)
              GOTO       CMDLBL(SAVSYSLP)
@@ -82,12 +82,12 @@ SAVSYSLP:
  RESTART:    CALL       PGM(QSYS/QSTRUP)
              MONMSG     MSGID(CPF0000)
              STRTCP
-             MONMSG     MSGID(CPF0000)
+             MONMSG     MSGID(CPF0000 TCP0000)
              DLYJOB     DLY(60)
              STRHOSTSVR SERVER(*ALL)
-             MONMSG     MSGID(CPF0000)
+             MONMSG     MSGID(CPF0000 TCP0000)
              STRTCPSVR  SERVER(*ALL)
-             MONMSG     MSGID(CPF0000)
+             MONMSG     MSGID(CPF0000 TCP0000)
              DLYJOB     DLY(60)
              DSPJOBLOG  JOB(*) OUTPUT(*PRINT)
              CALL       QSTOOLS/DISCNFY PARM(&STATUS 'QPJOBLOG')
