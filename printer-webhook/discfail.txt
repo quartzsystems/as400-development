@@ -1,0 +1,7 @@
+ibmi password
+namefmt 1
+lcd /tmp
+bin
+put fullsave.txt fullsave.tmp
+rename fullsave.tmp fullsave-failed.txt
+quit
